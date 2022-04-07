@@ -563,7 +563,17 @@ abstract class BasePet extends Living {
 
 		$ev = new PetRespawnEvent($loader, $this->getPetData(), $loader->getBlockPetsConfig()->getRespawnTime());
 		$ev->call();
-
+                $inventory = $this->getInventory();
+                $owner = $ev->getPetData()->getOwner();
+                $ownervec3 = $owner->getPosition()->asVector3();
+                $count = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
+                foreach($count as $counts) {
+                    $invcontent = $inventory->getItem($counts);
+                    foreach (($invcontent) as $drop) {
+                        $owner->getWorld()->dropItem($ownervec3, $drop);
+                    }
+                }
+                $inventory->clearAll();
 		if($ev->isCancelled()) {
 			$this->flagForDespawn();
 			return;
